@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Memories</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+  <script src="firebase.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="upload-section">
+    <h2>Upload a Memory</h2>
+    <input type="file" id="imageInput" accept="image/*">
+    <input type="text" id="captionInput" placeholder="Enter a caption">
+    <button id="uploadBtn">Upload</button>
+  </div>
+  <div class="gallery" id="galleryContainer"></div>
+</body>
+</html>
