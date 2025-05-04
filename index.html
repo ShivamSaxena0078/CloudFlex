@@ -1,19 +1,25 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Memory Vault</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="firebase.js" defer></script>
-  <script src="script.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
+  <div class="container home">
     <h1>📸 Memory Vault</h1>
-    <p>Your moments, your style.</p>
-    <button id="loginBtn">Sign in with Google</button>
+    <p class="intro">A cute little vault to save your special memories with a touch of nostalgia.</p>
+    <button onclick="loginWithGoogle()">Sign in with Google</button>
+    <div class="details">
+      <p>✨ Upload photos</p>
+      <p>📅 Auto timestamped</p>
+      <p>🎞️ View in polaroid style</p>
+    </div>
   </div>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
+  <script src="firebase.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
