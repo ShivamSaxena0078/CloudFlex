@@ -1,44 +1,73 @@
-// index.html
-if (document.getElementById('loginBtn')) {
-    document.getElementById('loginBtn').onclick = async () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      try {
-        await firebase.auth().signInWithPopup(provider);
-        window.location.href = "gallery.html";
-      } catch (err) {
-        alert("Login failed!");
-      }
-    };
+
+const auth = firebase.auth();
+const storage = firebase.storage();
+
+function loginWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).then(() => {
+    window.location.href = 'gallery.html';
+  });
+}
+
+function logout() {
+  auth.signOut().then(() => {
+    window.location.href = 'index.html';
+  });
+}
+
+auth.onAuthStateChanged(user => {
+  if (user && document.getElementById('welcome')) {
+    document.getElementById('welcome').innerText = `Welcome, ${user.displayName}!`;
+    loadGallery();
   }
-  
-  // gallery.html
-  if (document.getElementById('uploadBtn')) {
-    firebase.auth().onAuthStateChanged(user => {
-      if (!user) window.location.href = "index.html";
+});
+
+function uploadImage() {
+  const file = document.getElementById('imageUpload').files[0];
+  const caption = document.getElementById('captionInput').value;
+  const timeNow = new Date().toLocaleString();
+
+  if (!file || !caption) {
+    alert('Please select a file and write a caption.');
+    return;
+  }
+
+  const storageRef = storage.ref(`images/${file.name}`);
+  storageRef.put(file).then(snapshot => {
+    return snapshot.ref.getDownloadURL();
+  }).then(url => {
+    const gallery = document.getElementById('gallery');
+    const div = document.createElement('div');
+    div.className = 'polaroid';
+    div.innerHTML = `<img src="${url}" alt="memory"><div class='caption'>${caption}</div><div class='time'>${timeNow}</div>`;
+    div.onclick = () => openModal(url, caption, timeNow);
+    gallery.appendChild(div);
+  });
+}
+
+function loadGallery() {
+  const gallery = document.getElementById('gallery');
+  storage.ref('images').listAll().then(res => {
+    res.items.forEach(itemRef => {
+      itemRef.getDownloadURL().then(url => {
+        const caption = "Uploaded memory";
+        const timeNow = new Date().toLocaleString(); // Placeholder; ideally store timestamp metadata
+        const div = document.createElement('div');
+        div.className = 'polaroid';
+        div.innerHTML = `<img src="${url}" alt="memory"><div class='caption'>${caption}</div><div class='time'>${timeNow}</div>`;
+        div.onclick = () => openModal(url, caption, timeNow);
+        gallery.appendChild(div);
+      });
     });
-  
-    const storage = firebase.storage();
-  
-    document.getElementById('uploadBtn').onclick = async () => {
-      const file = document.getElementById('imageInput').files[0];
-      const caption = document.getElementById('captionInput').value;
-  
-      if (!file || !caption) return alert("Add both image and caption");
-  
-      const fileRef = storage.ref().child('images/' + Date.now() + '-' + file.name);
-      await fileRef.put(file);
-      const url = await fileRef.getDownloadURL();
-  
-      const gallery = document.getElementById('galleryContainer');
-      const i = gallery.children.length;
-      const card = document.createElement('div');
-      card.className = 'polaroid';
-      card.style.setProperty('--i', i);
-      card.innerHTML = `<img src="${url}" /><div class="caption">${caption}</div>`;
-      gallery.prepend(card);
-  
-      document.getElementById('imageInput').value = '';
-      document.getElementById('captionInput').value = '';
-    };
-  }
-  
+  });
+}
+
+function openModal(url, caption, time) {
+  document.getElementById('modalImage').src = url;
+  document.getElementById('modalCaption').innerHTML = `<p class='caption'>${caption}</p><p class='time'>Uploaded on ${time}</p>`;
+  document.getElementById('zoomModal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('zoomModal').style.display = 'none';
+}
