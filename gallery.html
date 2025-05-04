@@ -1,23 +1,34 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Your Memories</title>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
-  <script src="firebase.js" defer></script>
-  <script src="script.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 </head>
-<body>
-  <div class="upload-section">
-    <h2>Upload a Memory</h2>
-    <input type="file" id="imageInput" accept="image/*">
-    <input type="text" id="captionInput" placeholder="Enter a caption">
-    <button id="uploadBtn">Upload</button>
+<body class="gallery-page">
+  <div class="top-bar">
+    <span id="welcome"></span>
+    <button onclick="logout()">Logout</button>
   </div>
-  <div class="gallery" id="galleryContainer"></div>
+  <div class="upload-form">
+    <input type="file" id="imageUpload">
+    <input type="text" id="captionInput" placeholder="Write a caption...">
+    <button onclick="uploadImage()">Upload</button>
+  </div>
+  <div class="gallery" id="gallery"></div>
+
+  <!-- Zoom Modal -->
+  <div id="zoomModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+    <div id="modalCaption"></div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js"></script>
+  <script src="firebase.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
