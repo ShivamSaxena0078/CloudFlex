@@ -1,34 +1,33 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Your Memories</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Vault</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  <script src="firebase.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
-<body class="gallery-page">
-  <div class="top-bar">
-    <span id="welcome"></span>
+<body>
+  <header>
+    <h1>📸 Memory Vault</h1>
+    <div id="welcome"></div>
     <button onclick="logout()">Logout</button>
-  </div>
-  <div class="upload-form">
-    <input type="file" id="imageUpload">
-    <input type="text" id="captionInput" placeholder="Write a caption...">
-    <button onclick="uploadImage()">Upload</button>
-  </div>
-  <div class="gallery" id="gallery"></div>
+  </header>
 
-  <!-- Zoom Modal -->
-  <div id="zoomModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img class="modal-content" id="modalImage">
-    <div id="modalCaption"></div>
-  </div>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
-<script src="firebase.js"></script>
-<script src="script.js"></script>
+  <main>
+    <div class="upload-box">
+      <input type="file" id="imageInput" accept="image/*" />
+      <input type="text" id="captionInput" placeholder="Write a caption..." />
+      <button onclick="uploadImage()">Upload</button>
+    </div>
+    <div id="gallery" class="gallery"></div>
+  </main>
 </body>
+<script>
+  window.onload = loadGallery;
+</script>
 </html>
