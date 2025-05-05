@@ -31,12 +31,13 @@ function uploadImage() {
 
   const userId = auth.currentUser.uid;
   const timestamp = Date.now();
-  const storageRef = storage.ref(`images/${userId}/${timestamp}_${file.name}`);
+  const fileName = `${timestamp}_${caption.replace(/\s+/g, "_")}.${file.name.split('.').pop()}`;
+  const storageRef = storage.ref(`images/${userId}/${fileName}`);
 
   storageRef.put(file).then(snapshot => {
     return snapshot.ref.getDownloadURL();
   }).then(url => {
-    displayImage(url, caption, storageRef.fullPath);
+    displayImage(url, caption, storageRef.fullPath, new Date(timestamp).toLocaleString());
   }).catch(err => {
     console.error("Upload failed:", err);
   });
@@ -48,8 +49,7 @@ function displayImage(url, caption, path, time = null) {
   div.className = "polaroid";
 
   if (!time) {
-    const now = new Date();
-    time = now.toLocaleString();
+    time = new Date().toLocaleString();
   }
 
   div.innerHTML = `
@@ -60,7 +60,7 @@ function displayImage(url, caption, path, time = null) {
   `;
 
   div.querySelector(".deleteBtn").onclick = (e) => {
-    e.stopPropagation(); // prevent zoom when deleting
+    e.stopPropagation();
     deleteImage(path, div);
   };
 
@@ -92,8 +92,9 @@ function loadGallery() {
         res.items.forEach(itemRef => {
           itemRef.getDownloadURL().then(url => {
             const nameParts = itemRef.name.split("_");
-            const caption = nameParts.slice(1).join("_").replace(/\.[^/.]+$/, "");
-            const time = new Date(parseInt(nameParts[0])).toLocaleString();
+            const timestamp = parseInt(nameParts[0]);
+            const caption = nameParts.slice(1).join("_").replace(/\.[^/.]+$/, "").replace(/_/g, " ");
+            const time = new Date(timestamp).toLocaleString();
             displayImage(url, caption, itemRef.fullPath, time);
           });
         });
